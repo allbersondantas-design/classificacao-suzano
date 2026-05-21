@@ -1,0 +1,12 @@
+# Ambientes virtuais e pacotes
+venv/
+node_modules/
+__pycache__/
+
+# Variáveis de ambiente e Banco de Dados Local
+.env
+*.db
+suzano_poc.db
+
+# Arquivos de sistema
+.DS_Store
