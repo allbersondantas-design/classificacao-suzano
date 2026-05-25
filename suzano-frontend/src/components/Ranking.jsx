@@ -5,7 +5,7 @@ export default function Ranking() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('http://localhost:8000/ranking')
+    fetch('https://suzano-formulario-api-122895657034.southamerica-east1.run.app/ranking')
       .then(res => res.json())
       .then(data => {
         setRanking(data);

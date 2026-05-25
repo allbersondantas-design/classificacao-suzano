@@ -45,7 +45,7 @@ export default function Formulario() {
       
       try {
         // Vai bater na rota do ecossistema que criamos no backend!
-        const res = await fetch(`http://localhost:8000/ecossistema/${id}`);
+        const res = await fetch(`https://suzano-formulario-api-122895657034.southamerica-east1.run.app/ecossistema/${id}`);
         if (res.ok) {
           const data = await res.json();
           if (data) {
@@ -70,7 +70,7 @@ export default function Formulario() {
     setErro('');
 
     try {
-      const response = await fetch('http://localhost:8000/submit', {
+      const response = await fetch('https://suzano-formulario-api-122895657034.southamerica-east1.run.app/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
@@ -134,7 +134,7 @@ export default function Formulario() {
             <input 
               type="url" 
               required 
-              placeholder="Ex: incentiv.me/projetos/1234" 
+              placeholder="Ex: https://app.incentiv.me/projects/0000000" 
               className={inputStyle}
               onChange={handleLinkChange} // Adicionamos a nova função aqui!
             />
