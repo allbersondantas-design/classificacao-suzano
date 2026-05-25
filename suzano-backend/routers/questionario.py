@@ -1,4 +1,6 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, Header
+from typing import Optional
+import os
 from sqlalchemy.orm import Session
 import re
 from schemas import RespostaQuestionario
@@ -66,7 +68,17 @@ async def receber_resposta(dados: RespostaQuestionario, db: Session = Depends(ge
     return {"mensagem": "Sucesso", "projeto": projeto_info["nome"], "pontuacao": pontuacao}
 
 @router.get("/ranking")
-async def obter_ranking(db: Session = Depends(get_db)):
+async def obter_ranking(
+    x_admin_token: Optional[str] = Header(None), 
+    db: Session = Depends(get_db)
+):
+    # Define a senha mestra (puxa da variável de ambiente ou usa o padrão)
+    SENHA_ADMIN = os.getenv("ADMIN_PASSWORD", "insuz@#2024")
+    
+    # Validação de segurança: Se a senha não bater, bloqueia na hora!
+    if x_admin_token != SENHA_ADMIN:
+        raise HTTPException(status_code=401, detail="Acesso não autorizado")
+
     # Consulta já ordenada pelo banco de dados
     respostas = db.query(RespostaQuestionarioDB).order_by(RespostaQuestionarioDB.pontuacao_final.desc()).all()
     
@@ -74,7 +86,7 @@ async def obter_ranking(db: Session = Depends(get_db)):
     posicao_atual = 1
     
     for i, item in enumerate(respostas):
-        # Lógica de empate [cite: 21, 147]
+        # Lógica de empate
         if i > 0 and item.pontuacao_final < respostas[i-1].pontuacao_final:
             posicao_atual = i + 1
             
